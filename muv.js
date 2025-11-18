@@ -17,10 +17,12 @@ function muv(el, fromX, duration = 800, easing = t => t * (2 - t)) {
   function tick(now) {
     const t = Math.min((now - startTime) / duration, 1); // progress from 0 → 1
     const eased = easing(t);
+
     const x = fromX * (1 - eased);  // interpolate position
+    const y = fromY * (1 - eased);
 
     // Apply transform and fade
-    el.style.transform = `translateX(${x}px)`;
+    el.style.transform = `translateX(${x}px, ${y}px)`;
     el.style.opacity = eased;
 
     if (t < 1) requestAnimationFrame(tick);
@@ -30,7 +32,7 @@ function muv(el, fromX, duration = 800, easing = t => t * (2 - t)) {
 }
 
 function initMuvAutoAnimations() {
-  const elements = document.querySelectorAll('.animated-left, .animated-right');
+  const elements = document.querySelectorAll('.animated-left, .animated-right, .animated-top. .animated-bottom');
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -40,7 +42,12 @@ function initMuvAutoAnimations() {
       observer.unobserve(el); // run animation only once*
 
       // SETTINGS — initial offset distance (in px)
-      const fromX = el.classList.contains('animated-left') ? -100 : 100;
+      // offsets based on class
+      let fromX = 0, fromY = 0;
+      if (el.classList.contains('animated-left')) fromX = -100;
+      if (el.classList.contains('animated-right')) fromX = 100;
+      if (el.classList.contains('animated-top')) fromY = -100;
+      if (el.classList.contains('animated-bottom')) fromY = 100;
 
        // SETTINGS — initial appearance before animation
       el.style.opacity = 0;
