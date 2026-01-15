@@ -11,7 +11,7 @@ console.log("[Muv.js] is running.")
  * @param {function} easing - Easing function (controls motion curve)
  */
 
-function muv(el, fromX, duration = 800, easing = t => t * (2 - t)) {
+function muv(el, fromX, fromY, duration = 800, easing = t => t * (2 - t)) {
   const startTime = performance.now();
 
   function tick(now) {
@@ -22,7 +22,7 @@ function muv(el, fromX, duration = 800, easing = t => t * (2 - t)) {
     const y = fromY * (1 - eased);
 
     // Apply transform and fade
-    el.style.transform = `translateX(${x}px, ${y}px)`;
+    el.style.transform = `translate(${x}px, ${y}px)`;
     el.style.opacity = eased;
 
     if (t < 1) requestAnimationFrame(tick);
@@ -54,7 +54,7 @@ function initMuvAutoAnimations() {
       el.style.transform = `translateX(${fromX}px)`;
 
       // You can tweak duration, easing, or even customize per element
-      muv(el, fromX, 800, t => t * (2 - t)); // 800ms, ease-out
+      muv(el, fromX, fromY, 800, t => t * (2 - t)); // 800ms, ease-out
     });
     // SETTINGS — percentage of element visible before animation triggers
   }, { threshold: 0.1 });
